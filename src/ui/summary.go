@@ -59,7 +59,7 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 		case strings.HasPrefix(line, "+"):
 			coloredLines = append(coloredLines, GreenText.Render(line))
 		case strings.HasPrefix(line, "-"):
-			coloredLines = append(coloredLines, redText.Render(line))
+			coloredLines = append(coloredLines, RedText.Render(line))
 		default:
 			coloredLines = append(coloredLines, line)
 		}
@@ -80,7 +80,7 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 	if snap.IsNew() {
 		header = lipgloss.JoinVertical(0, GreenText.Render("+new results"), line)
 	} else {
-		header = lipgloss.JoinVertical(0, redText.Render("-old snapshot"), GreenText.Render("+new results"), line)
+		header = lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), line)
 	}
 
 	return lipgloss.JoinVertical(0.05, header,

@@ -88,9 +88,9 @@ func (m reviewModel) View() string {
 	b.WriteString("\n" + m.paginator.View())
 	b.WriteString("\n\n")
 	b.WriteString("  " + GreenText.Render("a") + " accept " + grayText.Render("keep the new snapshot") + "\n")
-	b.WriteString("  " + redText.Render("r") + " reject " + grayText.Render("reject the new snapshot") + "\n")
+	b.WriteString("  " + RedText.Render("r") + " reject " + grayText.Render("reject the new snapshot") + "\n")
 	b.WriteString("  " + yellowText.Render("s") + " skip   " + grayText.Render("keep both for now") + "\n")
-	b.WriteString("  " + redText.Bold(true).Render("q quit   ") + grayText.Render("stop reviewing") + "\n")
+	b.WriteString("  " + RedText.Bold(true).Render("q quit   ") + grayText.Render("stop reviewing") + "\n")
 
 	return b.String()
 }
