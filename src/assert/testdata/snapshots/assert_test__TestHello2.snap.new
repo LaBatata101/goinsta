@@ -1,0 +1,8 @@
+---
+source: /home/labatata/Code/Go/goinsta/src/assert/snapshot_test.go
+assertion_line: 26
+---
+assert_test.Test{
+  field1: "world",
+  field2: 10,
+}
