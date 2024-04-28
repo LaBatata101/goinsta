@@ -148,3 +148,17 @@ func Write(path, snapshotName, content, source string, loc int) (Snapshot, error
 
 	return Snapshot{Source: source, Loc: int(loc), Content: content, Name: snapshotName, path: path}, err
 }
+func AcceptAll(paths []string) ([]Snapshot, error) {
+	var acceptSnaps []Snapshot
+	for _, snapPath := range paths {
+		snap, err := Read(snapPath)
+		if err != nil {
+			return acceptSnaps, err
+		}
+
+		snap.Reject()
+		acceptSnaps = append(acceptSnaps, snap)
+	}
+
+	return acceptSnaps, nil
+}

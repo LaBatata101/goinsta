@@ -2,6 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"goinsta/snapshot"
+	"goinsta/ui"
+	"log"
 
 	"github.com/spf13/cobra"
 )
@@ -14,6 +17,19 @@ var acceptCmd = &cobra.Command{
 	Use:   "accept",
 	Short: "Accept all snapshots",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Accept")
+		snapshots, err := snapshot.GetNewSnapshotPaths()
+		if err != nil {
+			log.Fatal("An error ocurred while getting .snap.new snapshots: ", err)
+		}
+
+		acceptedSnaps, err := snapshot.AcceptAll(snapshots)
+		if err != nil {
+			log.Fatal("An error ocurred while accepting snapshots: ", err)
+		}
+
+		fmt.Println(ui.GreenText.Render("Accepted") + ":")
+		for _, snap := range acceptedSnaps {
+			fmt.Printf("  %s (%s)\n", snap.Source, snap.Name)
+		}
 	},
 }
