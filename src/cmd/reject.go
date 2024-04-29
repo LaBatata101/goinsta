@@ -22,6 +22,11 @@ var rejectCmd = &cobra.Command{
 			log.Fatal("An error ocurred while getting .snap.new snapshots: ", err)
 		}
 
+		if len(snapshots) == 0 {
+			fmt.Println("no snapshots to review")
+			return
+		}
+
 		rejectedSnaps, err := snapshot.RejectAll(snapshots)
 		if err != nil {
 			log.Fatal("An error ocurred while accepting snapshots: ", err)

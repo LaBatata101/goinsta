@@ -15,5 +15,9 @@ var reviewCmd = &cobra.Command{
 	Short: "Interactively review snapshots",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Review")
+		if len(snapshots) == 0 {
+			fmt.Println("no snapshots to review")
+			return
+		}
 	},
 }
