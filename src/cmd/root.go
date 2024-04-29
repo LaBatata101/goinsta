@@ -10,9 +10,6 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "goinsta",
 	Short: "A helper utility to manage goinsta snapshots",
-	Example: `
-Use like this
-    `,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) == 0 {
 			cmd.Help()

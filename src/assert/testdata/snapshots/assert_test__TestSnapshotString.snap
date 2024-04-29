@@ -1,8 +1,5 @@
 ---
 source: /home/labatata/Code/Go/goinsta/src/assert/snapshot_test.go
-assertion_line: 18
+assertion_line: 26
 ---
-assert_test.Test{
-  field1: "hello",
-  field2: 10,
-}
+"This is a string"

@@ -1,8 +1,10 @@
 ---
 source: /home/labatata/Code/Go/goinsta/src/assert/snapshot_test.go
-assertion_line: 26
+assertion_line: 22
 ---
 assert_test.Test{
-  field1: "world",
+  field1: "hello",
   field2: 10,
+  field3: false,
+  field4: 3.14,
 }
