@@ -172,7 +172,7 @@ func AcceptAll(paths []string) ([]Snapshot, error) {
 			return acceptSnaps, err
 		}
 
-		snap.Reject()
+		snap.Accept()
 		acceptSnaps = append(acceptSnaps, snap)
 	}
 
