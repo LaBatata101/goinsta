@@ -48,7 +48,7 @@ func Snapshot(t *testing.T, value any) {
 	sq := litter.Options{
 		HidePrivateFields: false,
 	}
-	newContent := sq.Sdump(value)
+	newContent := sq.Sdump(value) + "\n"
 
 	_, err = os.Stat(snapshotPath)
 	if err == nil {
