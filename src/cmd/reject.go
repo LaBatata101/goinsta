@@ -31,10 +31,6 @@ var rejectCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal("An error ocurred while accepting snapshots: ", err)
 		}
-
-		fmt.Println(ui.RedText.Render("Rejected") + ":")
-		for _, snap := range rejectedSnaps {
-			fmt.Printf("  %s (%s)\n", snap.Source, snap.Name)
-		}
+		ui.PrintReject(rejectedSnaps)
 	},
 }

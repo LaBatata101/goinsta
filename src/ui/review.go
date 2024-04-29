@@ -2,7 +2,6 @@ package ui
 
 import (
 	"goinsta/snapshot"
-	"log"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/key"
@@ -14,15 +13,11 @@ type reviewModel struct {
 	snapshots     []snapshot.Snapshot
 	currSnapIndex int
 	paginator     paginator.Model
+	summary       *snapshot.Summary
 }
 
-func NewReviewModel() reviewModel {
+func ReviewSnapshotsModel(snapPaths []string, summary *snapshot.Summary) reviewModel {
 	var snapshots []snapshot.Snapshot
-	snapPaths, err := snapshot.GetNewSnapshotPaths()
-	if err != nil {
-		log.Fatal("Failed to get snapshot paths: ", err)
-	}
-
 	for _, snapshotPath := range snapPaths {
 		// Don't need to handle error here, since, we have valid snap paths at this point.
 		snap, _ := snapshot.Read(snapshotPath)
@@ -32,15 +27,16 @@ func NewReviewModel() reviewModel {
 	p := paginator.New()
 	p.Type = paginator.Arabic
 	p.PerPage = 1
-	p.ArabicFormat = greenText2.Bold(true).Render("  Reviewing: ") + "[" + yellowText.Bold(true).Render("%d/%d") + "]"
+	p.ArabicFormat = greenText2.Bold(true).Render("  Reviewing: ") + "[" + YellowText.Bold(true).Render("%d/%d") + "]"
 	p.KeyMap.NextPage = key.NewBinding(key.WithDisabled())
 	p.KeyMap.PrevPage = key.NewBinding(key.WithDisabled())
 	p.SetTotalPages(len(snapshots))
 
 	return reviewModel{
-		snapshots,
-		0,
-		p,
+		snapshots:     snapshots,
+		currSnapIndex: 0,
+		paginator:     p,
+		summary:       summary,
 	}
 }
 
@@ -54,16 +50,25 @@ func (m reviewModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.KeyMsg:
 		switch msg.String() {
 		case "a":
+			m.summary.AddAccepted(m.snapshots[m.currSnapIndex])
 			m.snapshots[m.currSnapIndex].Accept()
-			m.paginator.NextPage()
 			m.currSnapIndex++
+			if m.currSnapIndex < len(m.snapshots) {
+				m.paginator.NextPage()
+			}
 		case "r":
+			m.summary.AddRejected(m.snapshots[m.currSnapIndex])
 			m.snapshots[m.currSnapIndex].Reject()
-			m.paginator.NextPage()
 			m.currSnapIndex++
+			if m.currSnapIndex < len(m.snapshots) {
+				m.paginator.NextPage()
+			}
 		case "s":
-			m.paginator.NextPage()
+			m.summary.AddSkipped(m.snapshots[m.currSnapIndex])
 			m.currSnapIndex++
+			if m.currSnapIndex < len(m.snapshots) {
+				m.paginator.NextPage()
+			}
 		case "q", "esc", "ctrl+c":
 			return m, tea.Quit
 		}
@@ -89,7 +94,7 @@ func (m reviewModel) View() string {
 	b.WriteString("\n\n")
 	b.WriteString("  " + GreenText.Render("a") + " accept " + grayText.Render("keep the new snapshot") + "\n")
 	b.WriteString("  " + RedText.Render("r") + " reject " + grayText.Render("reject the new snapshot") + "\n")
-	b.WriteString("  " + yellowText.Render("s") + " skip   " + grayText.Render("keep both for now") + "\n")
+	b.WriteString("  " + YellowText.Render("s") + " skip   " + grayText.Render("keep both for now") + "\n")
 	b.WriteString("  " + RedText.Bold(true).Render("q quit   ") + grayText.Render("stop reviewing") + "\n")
 
 	return b.String()

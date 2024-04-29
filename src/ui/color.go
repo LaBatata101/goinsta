@@ -8,5 +8,5 @@ var GreenText2Underlined = lipgloss.NewStyle().Underline(true).Inherit(greenText
 var greenText2 = lipgloss.NewStyle().Foreground(lipgloss.Color("#658E84"))
 var RedText = lipgloss.NewStyle().Foreground(lipgloss.Color("#BF3F42"))
 var lineNumberColor = lipgloss.NewStyle().Foreground(lipgloss.Color("#6A9588"))
-var yellowText = lipgloss.NewStyle().Foreground(lipgloss.Color("#BA9E6B"))
+var YellowText = lipgloss.NewStyle().Foreground(lipgloss.Color("#BA9E6B"))
 var grayText = lipgloss.NewStyle().Foreground(lipgloss.Color("#94907E"))

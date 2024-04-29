@@ -13,6 +13,42 @@ import (
 	"golang.org/x/term"
 )
 
+func PrintSummary(summary *snapshot.Summary) {
+	fmt.Println(BoldText.Render("review finished"))
+	if len(summary.Accepted) > 0 {
+		PrintAccepted(summary.Accepted)
+	}
+
+	if len(summary.Rejected) > 0 {
+		PrintReject(summary.Rejected)
+	}
+
+	if len(summary.Skipped) > 0 {
+		PrintSkipped(summary.Skipped)
+	}
+}
+
+func PrintAccepted(snaps []snapshot.Snapshot) {
+	fmt.Println(GreenText.Render("Accepted") + ":")
+	for _, snap := range snaps {
+		fmt.Printf("  %s (%s)\n", snap.Source, snap.Name)
+	}
+}
+
+func PrintReject(snaps []snapshot.Snapshot) {
+	fmt.Println(RedText.Render("Rejected") + ":")
+	for _, snap := range snaps {
+		fmt.Printf("  %s (%s)\n", snap.Source, snap.Name)
+	}
+}
+
+func PrintSkipped(snaps []snapshot.Snapshot) {
+	fmt.Println(YellowText.Render("Skipped") + ":")
+	for _, snap := range snaps {
+		fmt.Printf("  %s (%s)\n", snap.Source, snap.Name)
+	}
+}
+
 func RenderSnapshotSummary(snap *snapshot.Snapshot) {
 	fmt.Println(SnapshotSummary(snap))
 }
@@ -40,7 +76,7 @@ func Header(termWidth int, snap *snapshot.Snapshot) string {
 	header := fmt.Sprintf("%s%s%s", headerLine, headerText, headerLine)
 
 	s1 := fmt.Sprintf("Snapshot file: %s", GreenText2Underlined.Render(snap.CleanPath()))
-	s2 := fmt.Sprintf("Snapshot: %s", yellowText.Render(snap.Name))
+	s2 := fmt.Sprintf("Snapshot: %s", YellowText.Render(snap.Name))
 	s3 := fmt.Sprintf("Source: %s:%s", greenText2.Render(snap.Source),
 		lipgloss.NewStyle().Bold(true).Render(strconv.Itoa(snap.Loc)))
 
