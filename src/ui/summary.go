@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/charmbracelet/lipgloss"
+	"github.com/muesli/reflow/wrap"
 	"golang.org/x/term"
 )
 
@@ -91,6 +92,7 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 	scanner := bufio.NewScanner(strings.NewReader(snap.Diff()))
 	for scanner.Scan() {
 		line := scanner.Text()
+		line = wrap.String(line, int(float32(termWidth)*0.98)) // wrap the line to 98% of the terminal size
 		switch {
 		case strings.HasPrefix(line, "+"):
 			coloredLines = append(coloredLines, GreenText.Render(line))
