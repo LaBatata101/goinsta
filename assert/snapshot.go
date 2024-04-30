@@ -54,7 +54,7 @@ func Snapshot(t *testing.T, value any) {
 	if err == nil {
 		// Don't need to handle error here, since, we already checkd that `snapshotPath` exist.
 		snap, _ := snapshot.Read(snapshotPath)
-		edits := myers.ComputeEdits(newContent, snap.Content)
+		edits := myers.ComputeEdits(newContent, snap.Content+"\n")
 
 		// Only show summary if the snapshot content was changed
 		if len(edits) > 0 {
