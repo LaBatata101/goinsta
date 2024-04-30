@@ -2,8 +2,6 @@ package assert
 
 import (
 	"errors"
-	"goinsta/snapshot"
-	"goinsta/ui"
 	"gotextdiff/myers"
 	"io/fs"
 	"log"
@@ -13,6 +11,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
+	"github.com/LaBatata101/goinsta/internal/ui"
 	"github.com/sanity-io/litter"
 )
 

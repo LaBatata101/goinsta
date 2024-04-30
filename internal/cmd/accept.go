@@ -2,20 +2,20 @@ package cmd
 
 import (
 	"fmt"
-	"goinsta/snapshot"
-	"goinsta/ui"
 	"log"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
+	"github.com/LaBatata101/goinsta/internal/ui"
 	"github.com/spf13/cobra"
 )
 
 func init() {
-	rootCmd.AddCommand(rejectCmd)
+	rootCmd.AddCommand(acceptCmd)
 }
 
-var rejectCmd = &cobra.Command{
-	Use:   "reject",
-	Short: "Reject all snapshots",
+var acceptCmd = &cobra.Command{
+	Use:   "accept",
+	Short: "Accept all snapshots",
 	Run: func(cmd *cobra.Command, args []string) {
 		snapshots, err := snapshot.GetNewSnapshotPaths()
 		if err != nil {
@@ -27,10 +27,10 @@ var rejectCmd = &cobra.Command{
 			return
 		}
 
-		rejectedSnaps, err := snapshot.RejectAll(snapshots)
+		acceptedSnaps, err := snapshot.AcceptAll(snapshots)
 		if err != nil {
 			log.Fatal("An error ocurred while accepting snapshots: ", err)
 		}
-		ui.PrintReject(rejectedSnaps)
+		ui.PrintAccepted(acceptedSnaps)
 	},
 }

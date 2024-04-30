@@ -1,8 +1,9 @@
 package assert_test
 
 import (
-	"goinsta/assert"
 	"testing"
+
+	"github.com/LaBatata101/goinsta/assert"
 )
 
 type Test struct {

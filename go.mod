@@ -1,4 +1,4 @@
-module goinsta
+module github.com/LaBatata101/goinsta
 
 go 1.22.0
 
@@ -6,6 +6,7 @@ require (
 	github.com/charmbracelet/bubbles v0.18.0
 	github.com/charmbracelet/bubbletea v0.25.0
 	github.com/charmbracelet/lipgloss v0.10.0
+	github.com/muesli/reflow v0.3.0
 	github.com/sanity-io/litter v1.5.5
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/term v0.19.0
@@ -22,7 +23,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/muesli/ansi v0.0.0-20211018074035-2e021307bc4b // indirect
 	github.com/muesli/cancelreader v0.2.2 // indirect
-	github.com/muesli/reflow v0.3.0 // indirect
 	github.com/muesli/termenv v0.15.2 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
@@ -31,4 +31,4 @@ require (
 	golang.org/x/text v0.3.8 // indirect
 )
 
-replace gotextdiff => ./gotextdiff
+replace gotextdiff => ./internal/gotextdiff

@@ -1,9 +1,9 @@
 package ui
 
 import (
-	"goinsta/snapshot"
 	"strings"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/charmbracelet/bubbles/key"
 	"github.com/charmbracelet/bubbles/paginator"
 	"github.com/charmbracelet/bubbletea"

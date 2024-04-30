@@ -2,9 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"goinsta/snapshot"
 	"log"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/spf13/cobra"
 )
 

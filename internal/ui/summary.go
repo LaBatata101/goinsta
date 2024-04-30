@@ -3,12 +3,12 @@ package ui
 import (
 	"bufio"
 	"fmt"
-	"goinsta/snapshot"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wrap"
 	"golang.org/x/term"

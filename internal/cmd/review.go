@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
-	"goinsta/snapshot"
-	"goinsta/ui"
 	"log"
 
+	"github.com/LaBatata101/goinsta/internal/snapshot"
+	"github.com/LaBatata101/goinsta/internal/ui"
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/spf13/cobra"
 )
