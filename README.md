@@ -103,3 +103,8 @@ Use "goinsta [command] --help" for more information about a command.
 
 Here's an example of interactively reviewing snapshots using `goinsta review`
 ![interactive_review](./assets/interactive_snapshot_review.gif)
+
+# TODO
+
+-   Better visualization when having large diffs
+-   Highlight the words that changed in a line of the diff
