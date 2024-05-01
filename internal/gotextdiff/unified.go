@@ -206,7 +206,7 @@ func (u unified) String() string {
 				toCount++
 			}
 		}
-		for _, l := range hunk.lines {
+		for i, l := range hunk.lines {
 			switch l.kind {
 			case opDelete:
 				fmt.Fprintf(b, "-%s", l.content)
@@ -214,6 +214,9 @@ func (u unified) String() string {
 				fmt.Fprintf(b, "+%s", l.content)
 			default:
 				fmt.Fprintf(b, " %s", l.content)
+			}
+			if i < len(hunk.lines)-1 {
+				fmt.Fprint(b, "\n")
 			}
 		}
 	}
