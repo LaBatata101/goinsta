@@ -93,6 +93,9 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 	for scanner.Scan() {
 		line := scanner.Text()
 		line = wrap.String(line, int(float32(termWidth)*0.98)) // wrap the line to 98% of the terminal size
+		if line == "" {
+			continue
+		}
 		switch {
 		case strings.HasPrefix(line, "+"):
 			coloredLines = append(coloredLines, GreenText.Render(line))

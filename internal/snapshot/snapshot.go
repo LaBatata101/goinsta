@@ -34,6 +34,7 @@ func (s Snapshot) Reject() {
 }
 
 // Compute the difference between the new snapshot (.snap.new) and the old snapshot (.snap).
+// Return the diff string.
 func (s Snapshot) Diff() string {
 	oldSnapshotPath := strings.TrimSuffix(s.path, ".new")
 	_, err := os.Stat(oldSnapshotPath)
