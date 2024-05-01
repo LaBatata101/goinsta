@@ -2,11 +2,13 @@ package assert
 
 import (
 	"errors"
+	"fmt"
 	"gotextdiff"
 	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
 	"runtime"
 	"strings"
 	"testing"
@@ -45,10 +47,16 @@ func Snapshot(t *testing.T, value any) {
 		t.Fatal("An error ocurred while creating absulute path for snapshot file: ", err)
 	}
 
-	sq := litter.Options{
-		HidePrivateFields: false,
+	var newContent string
+	switch reflect.TypeOf(value).Kind() {
+	case reflect.Struct:
+		sq := litter.Options{
+			HidePrivateFields: false,
+		}
+		newContent = sq.Sdump(value) + "\n"
+	default:
+		newContent = fmt.Sprintln(value)
 	}
-	newContent := sq.Sdump(value) + "\n"
 
 	_, err = os.Stat(snapshotPath)
 	if err == nil {
