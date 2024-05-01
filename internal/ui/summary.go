@@ -15,7 +15,7 @@ import (
 )
 
 func PrintSummary(summary *snapshot.Summary) {
-	fmt.Println(BoldText.Render("review finished"))
+	fmt.Println(BoldText.Render("\nreview finished"))
 	if len(summary.Accepted) > 0 {
 		PrintAccepted(summary.Accepted)
 	}
@@ -85,17 +85,18 @@ func Header(termWidth int, snap *snapshot.Snapshot) string {
 }
 
 func diffView(termWidth int, snap *snapshot.Snapshot) string {
-	line := strings.Repeat("─", termWidth)
+	lineSeparator := strings.Repeat("─", termWidth)
 
-	var totalLoc int
+	var loc int
 	var coloredLines []string
+	var lineNumbersColumn []string
 	scanner := bufio.NewScanner(strings.NewReader(snap.Diff()))
 	for scanner.Scan() {
 		line := scanner.Text()
-		line = wrap.String(line, int(float32(termWidth)*0.98)) // wrap the line to 98% of the terminal size
 		if line == "" {
 			continue
 		}
+		line = wrap.String(line, int(float32(termWidth)*0.98)) // wrap the line to 98% of the terminal width
 		switch {
 		case strings.HasPrefix(line, "+"):
 			coloredLines = append(coloredLines, GreenText.Render(line))
@@ -104,26 +105,29 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 		default:
 			coloredLines = append(coloredLines, line)
 		}
-		totalLoc++
+		loc++
+		lineNumbersColumn = append(lineNumbersColumn, lineNumberColor.Render(strconv.Itoa(loc)))
+
+		// Add some space for wrapped lines before showing the next number.
+		if lineHeight := lipgloss.Height(line); lineHeight > 1 {
+			for range lineHeight - 1 {
+				lineNumbersColumn = append(lineNumbersColumn, " ")
+			}
+		}
 	}
 
-	var lineNumbers []string
-	for i := range totalLoc {
-		lineNumbers = append(lineNumbers, lineNumberColor.Render(strconv.Itoa(i+1)))
-	}
-
-	lineNumbersText := strings.Join(lineNumbers, " \n")
+	lineNumbersText := strings.Join(lineNumbersColumn, " \n")
 	diffText := strings.Join(coloredLines, "\n")
 
 	sourceBorder := lipgloss.NewStyle().BorderStyle(lipgloss.NormalBorder()).BorderLeft(true)
 
 	var header string
 	if snap.IsNew() {
-		header = lipgloss.JoinVertical(0, GreenText.Render("+new results"), line)
+		header = lipgloss.JoinVertical(0, GreenText.Render("+new results"), lineSeparator)
 	} else {
-		header = lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), line)
+		header = lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), lineSeparator)
 	}
 
 	return lipgloss.JoinVertical(0.05, header,
-		lipgloss.JoinHorizontal(0, lineNumbersText, sourceBorder.Render(diffText)), line)
+		lipgloss.JoinHorizontal(0, lineNumbersText, sourceBorder.Render(diffText)), lineSeparator)
 }
