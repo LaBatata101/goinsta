@@ -4,7 +4,6 @@ import (
 	"errors"
 	"fmt"
 	"gotextdiff"
-	"gotextdiff/myers"
 	"io/fs"
 	"log"
 	"os"
@@ -42,11 +41,9 @@ func (s Snapshot) Diff() string {
 		if err == nil {
 			// Don't need to handle error here, since, we already checkd that `oldSnapshotPath` exist.
 			oldSnap, _ := Read(oldSnapshotPath)
-			edits := myers.ComputeEdits(oldSnap.Content, s.Content)
-			return fmt.Sprint(gotextdiff.ToUnified(s.Content, edits))
+			return gotextdiff.Unified(oldSnap.Content, s.Content)
 		} else if errors.Is(err, fs.ErrNotExist) {
-			edits := myers.ComputeEdits("", s.Content)
-			return fmt.Sprint(gotextdiff.ToUnified("", edits))
+			return gotextdiff.Unified("", s.Content)
 		}
 	}
 	return ""

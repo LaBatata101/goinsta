@@ -8,35 +8,76 @@ package myers
 import (
 	"strings"
 
-	diff "gotextdiff"
-	"gotextdiff/span"
+	"gotextdiff"
 )
 
 // Sources:
 // https://blog.jcoglan.com/2017/02/17/the-myers-diff-algorithm-part-3/
 // https://www.codeproject.com/Articles/42279/%2FArticles%2F42279%2FInvestigating-Myers-diff-algorithm-Part-1-of-2
 
-func ComputeEdits(before, after string) []diff.TextEdit {
-	ops := operations(splitLines(before), splitLines(after))
-	edits := make([]diff.TextEdit, 0, len(ops))
+// ComputeEdits returns the diffs of two strings using a simple
+// line-based implementation, like [diff.Strings].
+//
+// Deprecated: this implementation is moribund. However, when diffs
+// appear in marker test expectations, they are the particular diffs
+// produced by this implementation. The marker test framework
+// asserts diff(orig, got)==wantDiff, but ideally it would compute
+// got==apply(orig, wantDiff) so that the notation of the diff
+// is immaterial.
+func ComputeEdits(before, after string) []gotextdiff.Edit {
+	beforeLines := splitLines(before)
+	ops := operations(beforeLines, splitLines(after))
+
+	// Build a table mapping line number to offset.
+	lineOffsets := make([]int, 0, len(beforeLines)+1)
+	total := 0
+	for i := range beforeLines {
+		lineOffsets = append(lineOffsets, total)
+		total += len(beforeLines[i])
+	}
+	lineOffsets = append(lineOffsets, total) // EOF
+
+	edits := make([]gotextdiff.Edit, 0, len(ops))
 	for _, op := range ops {
-		s := span.New(span.NewPoint(op.I1+1, 1, 0), span.NewPoint(op.I2+1, 1, 0))
+		start, end := lineOffsets[op.I1], lineOffsets[op.I2]
 		switch op.Kind {
-		case diff.Delete:
-			// Delete: unformatted[i1:i2] is deleted.
-			edits = append(edits, diff.TextEdit{Span: s})
-		case diff.Insert:
-			// Insert: formatted[j1:j2] is inserted at unformatted[i1:i1].
+		case opDelete:
+			// Delete: before[I1:I2] is deleted.
+			edits = append(edits, gotextdiff.Edit{Start: start, End: end})
+		case opInsert:
+			// Insert: after[J1:J2] is inserted at before[I1:I1].
 			if content := strings.Join(op.Content, ""); content != "" {
-				edits = append(edits, diff.TextEdit{Span: s, NewText: content})
+				edits = append(edits, gotextdiff.Edit{Start: start, End: end, New: content})
 			}
 		}
 	}
 	return edits
 }
 
+// opKind is used to denote the type of operation a line represents.
+type opKind int
+
+const (
+	opDelete opKind = iota // line deleted from input (-)
+	opInsert               // line inserted into output (+)
+	opEqual                // line present in input and output
+)
+
+func (kind opKind) String() string {
+	switch kind {
+	case opDelete:
+		return "delete"
+	case opInsert:
+		return "insert"
+	case opEqual:
+		return "equal"
+	default:
+		panic("unknown opKind")
+	}
+}
+
 type operation struct {
-	Kind    diff.OpKind
+	Kind    opKind
 	Content []string // content from b
 	I1, I2  int      // indices of the line in a
 	J1      int      // indices of the line in b, J2 implied by len(Content)
@@ -62,7 +103,7 @@ func operations(a, b []string) []*operation {
 			return
 		}
 		op.I2 = i2
-		if op.Kind == diff.Insert {
+		if op.Kind == opInsert {
 			op.Content = b[op.J1:j2]
 		}
 		solution[i] = op
@@ -78,7 +119,7 @@ func operations(a, b []string) []*operation {
 		for snake[0]-snake[1] > x-y {
 			if op == nil {
 				op = &operation{
-					Kind: diff.Delete,
+					Kind: opDelete,
 					I1:   x,
 					J1:   y,
 				}
@@ -94,7 +135,7 @@ func operations(a, b []string) []*operation {
 		for snake[0]-snake[1] < x-y {
 			if op == nil {
 				op = &operation{
-					Kind: diff.Insert,
+					Kind: opInsert,
 					I1:   x,
 					J1:   y,
 				}
