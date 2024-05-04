@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -51,28 +52,28 @@ func PrintSkipped(snaps []snapshot.Snapshot) {
 }
 
 func RenderSnapshotSummary(snap *snapshot.Snapshot) {
-	fmt.Println(SnapshotSummary(snap))
-}
-
-func SnapshotSummary(snap *snapshot.Snapshot) string {
 	termWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
 		termWidth = 100
 		log.Println("Failed to get terminal size, using default size")
 	}
 
-	header := Header(termWidth, snap)
-	diff := diffView(termWidth, snap)
-	return lipgloss.JoinVertical(0, header, diff)
+	fmt.Println(SnapshotSummary(snap, termWidth))
 }
 
-func Header(termWidth int, snap *snapshot.Snapshot) string {
+func SnapshotSummary(snap *snapshot.Snapshot, termWidth int) string {
+	header := summaryHeader(termWidth, snap)
+	diff := lipgloss.JoinVertical(0.05, diffHeader(termWidth, snap), diffView(termWidth, snap))
+	return lipgloss.JoinVertical(0, header, diff, strings.Repeat("─", termWidth))
+}
+
+func summaryHeader(termWidth int, snap *snapshot.Snapshot) string {
 	headerText := lipgloss.NewStyle().
 		SetString(" Snapshot Summary ").
 		Inherit(BoldText).
 		Render()
 	headerTextWidth, _ := lipgloss.Size(headerText)
-	headerLine := strings.Repeat("━", (termWidth-headerTextWidth)/2)
+	headerLine := strings.Repeat("━", int(math.Abs(float64(termWidth-headerTextWidth))/2))
 
 	header := fmt.Sprintf("%s%s%s", headerLine, headerText, headerLine)
 
@@ -84,9 +85,17 @@ func Header(termWidth int, snap *snapshot.Snapshot) string {
 	return lipgloss.JoinVertical(0, header, s1, s2, s3, strings.Repeat("─", termWidth))
 }
 
-func diffView(termWidth int, snap *snapshot.Snapshot) string {
+func diffHeader(termWidth int, snap *snapshot.Snapshot) string {
 	lineSeparator := strings.Repeat("─", termWidth)
+	// TODO: don't check if its new, check if it has difference to the old snapshot
+	if snap.IsNew() {
+		return lipgloss.JoinVertical(0, GreenText.Render("+new results"), lineSeparator)
+	} else {
+		return lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), lineSeparator)
+	}
+}
 
+func diffView(termWidth int, snap *snapshot.Snapshot) string {
 	var loc int
 	var coloredLines []string
 	var lineNumbersColumn []string
@@ -96,7 +105,7 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 		if line == "" {
 			continue
 		}
-		line = wrap.String(line, int(float32(termWidth)*0.98)) // wrap the line to 98% of the terminal width
+		line = wrap.String(line, int(float32(termWidth)*0.97)) // wrap the line to 97% of the terminal width
 		switch {
 		case strings.HasPrefix(line, "+"):
 			coloredLines = append(coloredLines, GreenText.Render(line))
@@ -121,13 +130,5 @@ func diffView(termWidth int, snap *snapshot.Snapshot) string {
 
 	sourceBorder := lipgloss.NewStyle().BorderStyle(lipgloss.NormalBorder()).BorderLeft(true)
 
-	var header string
-	if snap.IsNew() {
-		header = lipgloss.JoinVertical(0, GreenText.Render("+new results"), lineSeparator)
-	} else {
-		header = lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), lineSeparator)
-	}
-
-	return lipgloss.JoinVertical(0.05, header,
-		lipgloss.JoinHorizontal(0, lineNumbersText, sourceBorder.Render(diffText)), lineSeparator)
+	return lipgloss.JoinHorizontal(0, lineNumbersText, sourceBorder.Render(diffText))
 }

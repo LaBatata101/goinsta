@@ -106,5 +106,4 @@ Here's an example of interactively reviewing snapshots using `goinsta review`
 
 # TODO
 
--   Better visualization when having large diffs
 -   Highlight the words that changed in a line of the diff
