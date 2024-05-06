@@ -17,7 +17,7 @@ package difftest
 import (
 	"testing"
 
-	"gotextdiff"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff"
 )
 
 const (
@@ -307,7 +307,7 @@ func DiffTest(t *testing.T, compute func(before, after string) []gotextdiff.Edit
 			if err != nil {
 				t.Fatalf("Apply failed: %v", err)
 			}
-			unified, err := gotextdiff.ToUnified(FileA, FileB, test.In, edits, gotextdiff.DefaultContextLines)
+			unified, err := gotextdiff.ToUnified(test.In, edits, gotextdiff.DefaultContextLines)
 			if err != nil {
 				t.Fatalf("ToUnified: %v", err)
 			}

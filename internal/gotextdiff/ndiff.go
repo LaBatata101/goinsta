@@ -8,7 +8,7 @@ import (
 	"bytes"
 	"unicode/utf8"
 
-	"gotextdiff/lcs"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff/lcs"
 )
 
 // Strings computes the differences between two strings.

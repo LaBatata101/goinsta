@@ -3,7 +3,6 @@ package assert
 import (
 	"errors"
 	"fmt"
-	"gotextdiff"
 	"io/fs"
 	"log"
 	"os"
@@ -13,6 +12,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/LaBatata101/goinsta/internal/gotextdiff"
 	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/LaBatata101/goinsta/internal/ui"
 	"github.com/sanity-io/litter"

@@ -15,8 +15,8 @@ import (
 	"strings"
 	"testing"
 
-	"gotextdiff/difftest"
-	"gotextdiff/testenv"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff/difftest"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff/testenv"
 )
 
 func TestVerifyUnified(t *testing.T) {

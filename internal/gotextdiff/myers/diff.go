@@ -8,7 +8,7 @@ package myers
 import (
 	"strings"
 
-	"gotextdiff"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff"
 )
 
 // Sources:

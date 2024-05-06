@@ -14,9 +14,9 @@ import (
 	"testing"
 	"unicode/utf8"
 
-	"gotextdiff"
-	"gotextdiff/difftest"
-	"gotextdiff/testenv"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff/difftest"
+	"github.com/LaBatata101/goinsta/internal/gotextdiff/testenv"
 )
 
 func TestApply(t *testing.T) {

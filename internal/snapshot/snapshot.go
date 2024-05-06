@@ -3,13 +3,14 @@ package snapshot
 import (
 	"errors"
 	"fmt"
-	"gotextdiff"
 	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+
+	"github.com/LaBatata101/goinsta/internal/gotextdiff"
 )
 
 type Snapshot struct {

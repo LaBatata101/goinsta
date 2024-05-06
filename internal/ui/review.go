@@ -1,7 +1,6 @@
 package ui
 
 import (
-	"os"
 	"strings"
 
 	"github.com/LaBatata101/goinsta/internal/snapshot"
