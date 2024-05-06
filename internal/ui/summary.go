@@ -87,11 +87,10 @@ func summaryHeader(termWidth int, snap *snapshot.Snapshot) string {
 
 func diffHeader(termWidth int, snap *snapshot.Snapshot) string {
 	lineSeparator := strings.Repeat("─", termWidth)
-	// TODO: don't check if its new, check if it has difference to the old snapshot
-	if snap.IsNew() {
-		return lipgloss.JoinVertical(0, GreenText.Render("+new results"), lineSeparator)
-	} else {
+	if snap.HasDifference() {
 		return lipgloss.JoinVertical(0, RedText.Render("-old snapshot"), GreenText.Render("+new results"), lineSeparator)
+	} else {
+		return lipgloss.JoinVertical(0, GreenText.Render("+new results"), lineSeparator)
 	}
 }
 

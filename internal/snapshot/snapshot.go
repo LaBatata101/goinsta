@@ -50,8 +50,29 @@ func (s Snapshot) Diff() string {
 	return ""
 }
 
+func (s Snapshot) HasDifference() bool {
+	oldSnapshotPath := strings.TrimSuffix(s.path, ".new")
+	_, err := os.Stat(oldSnapshotPath)
+	if s.IsNew() && err == nil {
+		// Don't need to handle error here, since, we already checkd that `oldSnapshotPath` exist.
+		oldSnap, _ := Read(oldSnapshotPath)
+		edits := gotextdiff.Strings(oldSnap.Content, s.Content)
+		return len(edits) > 0
+	}
+	return false
+}
+
 func (s Snapshot) IsNew() bool {
 	return strings.HasSuffix(s.path, ".snap.new")
+}
+
+// Return the snapshot path relative to the `go.mod` directory.
+func (s Snapshot) CleanPath() string {
+	goModPath, found := findGoModPath(filepath.Dir(s.path))
+	if found {
+		return filepath.Join(filepath.Base(goModPath), strings.TrimPrefix(s.path, goModPath))
+	}
+	return s.path
 }
 
 func findGoModPath(dir string) (string, bool) {
@@ -70,15 +91,6 @@ func findGoModPath(dir string) (string, bool) {
 		currentDir = parentDir
 	}
 	return "", false
-}
-
-// Return the snapshot path relative to the `go.mod` directory.
-func (s Snapshot) CleanPath() string {
-	goModPath, found := findGoModPath(filepath.Dir(s.path))
-	if found {
-		return filepath.Join(filepath.Base(goModPath), strings.TrimPrefix(s.path, goModPath))
-	}
-	return s.path
 }
 
 // Returns all the `.snap.new` snapshots in the current directory and its sub-directories.
