@@ -1,5 +1,5 @@
 ---
 source: /home/labatata/Code/Go/goinsta/assert/snapshot_test.go
-assertion_line: 29
+assertion_line: 27
 ---
-This is a string
+"This is a string"
