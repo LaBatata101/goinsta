@@ -29,7 +29,7 @@ import "github.com/LaBatata101/goinsta/assert"
 To install the `goinsta` binary to manage the snapshots, use:
 
 ```bash
-$ go install github.com/LaBatata101/goinsta
+$ go install github.com/LaBatata101/goinsta@latest
 ```
 
 You may have to set the `GOBIN` environment variable, to set the location where the binary will be installed, with:
