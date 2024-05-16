@@ -11,9 +11,9 @@ import (
 	"testing"
 
 	"github.com/LaBatata101/goinsta/internal/gotextdiff"
+	"github.com/LaBatata101/goinsta/internal/litter"
 	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/LaBatata101/goinsta/internal/ui"
-	"github.com/sanity-io/litter"
 )
 
 const snapshotDirPath = "testdata/snapshots"
@@ -45,10 +45,7 @@ func Snapshot(t *testing.T, value any) {
 		t.Fatal("An error ocurred while creating absulute path for snapshot file: ", err)
 	}
 
-	sq := litter.Options{
-		HidePrivateFields: false,
-	}
-	newContent := sq.Sdump(value) + "\n"
+	newContent := litter.Sdump(value) + "\n"
 
 	_, err = os.Stat(snapshotPath)
 	if err == nil {

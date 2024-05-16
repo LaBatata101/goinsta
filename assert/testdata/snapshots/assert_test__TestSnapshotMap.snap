@@ -1,0 +1,9 @@
+---
+source: /home/labatata/Code/Go/goinsta/assert/snapshot_test.go
+assertion_line: 42
+---
+map[int]string{
+  1: "one",
+  2: "two",
+  3: "three",
+}

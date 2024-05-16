@@ -7,7 +7,6 @@ require (
 	github.com/charmbracelet/bubbletea v0.26.1
 	github.com/charmbracelet/lipgloss v0.10.0
 	github.com/muesli/reflow v0.3.0
-	github.com/sanity-io/litter v1.5.5
 	github.com/spf13/cobra v1.8.0
 	golang.org/x/term v0.20.0
 )

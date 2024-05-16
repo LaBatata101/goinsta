@@ -6,14 +6,13 @@ import (
 	"github.com/LaBatata101/goinsta/assert"
 )
 
-type Test struct {
-	field1 string
-	field2 int
-	field3 bool
-	field4 float32
-}
-
 func TestSnapshotStruct(t *testing.T) {
+	type Test struct {
+		field1 string
+		field2 int
+		field3 bool
+		field4 float32
+	}
 	t1 := Test{
 		"hello",
 		10,
@@ -25,6 +24,36 @@ func TestSnapshotStruct(t *testing.T) {
 
 func TestSnapshotString(t *testing.T) {
 	assert.Snapshot(t, "This is a string")
+}
+
+func TestSnapshotSlice(t *testing.T) {
+	assert.Snapshot(t, []string{"Hello", "World", "!"})
+}
+
+func TestSnapshotFunction(t *testing.T) {
+	assert.Snapshot(t, func(arg string) (bool, error) { return false, nil })
+}
+
+func TestSnapshotInterface(t *testing.T) {
+	assert.Snapshot(t, interface{}("hello from interface"))
+}
+
+func TestSnapshotMap(t *testing.T) {
+	assert.Snapshot(t, map[int]string{
+		3: "three",
+		1: "one",
+		2: "two",
+	})
+}
+
+func TestSnapshotCirculaReferenceStruct(t *testing.T) {
+	type T1 struct {
+		value *T1
+	}
+	t1 := T1{value: nil}
+	t2 := T1{value: &t1}
+	t1.value = &t2
+	assert.Snapshot(t, t1)
 }
 
 func TestSnapshotBigOutput(t *testing.T) {

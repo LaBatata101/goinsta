@@ -1,0 +1,9 @@
+---
+source: /home/labatata/Code/Go/goinsta/assert/snapshot_test.go
+assertion_line: 30
+---
+[]string{
+  "Hello",
+  "World",
+  "!",
+}

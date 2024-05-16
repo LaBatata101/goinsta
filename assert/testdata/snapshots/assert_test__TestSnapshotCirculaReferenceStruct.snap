@@ -1,0 +1,11 @@
+---
+source: /home/labatata/Code/Go/goinsta/assert/snapshot_test.go
+assertion_line: 44
+---
+assert_test.T1{
+  value: &assert_test.T1{ // p0
+    value: &assert_test.T1{
+      value: p0,
+    },
+  },
+}
