@@ -12,6 +12,7 @@ import (
 	"github.com/LaBatata101/goinsta/internal/snapshot"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/muesli/reflow/wrap"
+	"github.com/muesli/termenv"
 	"golang.org/x/term"
 )
 
@@ -52,9 +53,11 @@ func PrintSkipped(snaps []snapshot.Snapshot) {
 }
 
 func RenderSnapshotSummary(snap *snapshot.Snapshot) {
+	lipgloss.SetColorProfile(termenv.TrueColor)
+
 	termWidth, _, err := term.GetSize(int(os.Stdout.Fd()))
 	if err != nil {
-		termWidth = 100
+		termWidth = 150
 		log.Println("Failed to get terminal size, using default size")
 	}
 
